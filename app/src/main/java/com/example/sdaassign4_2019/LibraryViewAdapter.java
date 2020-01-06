@@ -31,6 +31,8 @@ package com.example.sdaassign4_2019;
         import androidx.annotation.NonNull;
         import androidx.recyclerview.widget.RecyclerView;
 
+        import com.bumptech.glide.Glide;
+
         import java.util.ArrayList;
 
 
@@ -44,9 +46,9 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
     //add array for each item\
     private ArrayList<String> mAuthor;
     private ArrayList<String> mTitle;
-    private ArrayList<Integer> mImageID;
+    private ArrayList<String> mImageID;
 
-    LibraryViewAdapter(Context mNewContext, ArrayList<String> author, ArrayList<String> title, ArrayList<Integer> imageId) {
+    LibraryViewAdapter(Context mNewContext, ArrayList<String> author, ArrayList<String> title, ArrayList<String> imageId) {
         this.mNewContext = mNewContext;
         this.mAuthor = author;
         this.mTitle = title;
@@ -68,7 +70,11 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
 
         viewHolder.authorText.setText(mAuthor.get(position));
         viewHolder.titleText.setText(mTitle.get(position));
-        viewHolder.imageItem.setImageResource(mImageID.get(position));
+
+        Glide.with(mNewContext)
+                .asBitmap()
+                .load(mImageID.get(position))
+                .into(viewHolder.imageItem);
 
         //should check here to see if the book is available.
         viewHolder.checkOut.setOnClickListener(new View.OnClickListener() {
