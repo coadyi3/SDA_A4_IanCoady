@@ -97,6 +97,28 @@ public class Settings extends Fragment {
             }
         });
 
+
+        final Button deleteBtn = root.findViewById(R.id.deleteButton);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(NAME_KEY, "");
+                editor.putString(EMAIL_KEY,"");
+                editor.putInt(ID_KEY, 0);
+                editor.apply();
+
+                name        .setText("");
+                email       .setText("");
+                id          .setText("");
+
+                validName   .setText("");
+                validEmail  .setText("");
+                validId     .setText("");
+
+            }
+        });
+
         return root;
 
     }
