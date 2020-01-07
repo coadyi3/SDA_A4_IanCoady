@@ -25,11 +25,14 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class Settings extends Fragment {
 
+    static final String PREF_KEY = "preferences";
     private static final String NAME_KEY = "NAME_KEY";
     private static final String EMAIL_KEY = "EMAIL_KEY";
     private static final String ID_KEY = "ID_KEY";
     private TextView name, email, id;
     private EditText validName, validEmail, validId;
+    public SharedPreferences prefs;
+
 
     public Settings() {
         // Required empty public constructor
@@ -42,7 +45,7 @@ public class Settings extends Fragment {
 
         View root = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        final SharedPreferences prefs = this.getActivity().getSharedPreferences("preferences", MODE_PRIVATE );
+        prefs = this.getActivity().getSharedPreferences(PREF_KEY, MODE_PRIVATE );
 
         name    = root.findViewById(R.id.savedName);
         email   = root.findViewById(R.id.savedEmail);
@@ -60,6 +63,7 @@ public class Settings extends Fragment {
         validId = root.findViewById(R.id.borrowerID);
 
         final Button saveBtn = root.findViewById(R.id.saveButton);
+
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,7 +127,7 @@ public class Settings extends Fragment {
 
     }
 
-    public static boolean isValidEmail(CharSequence target) {
+    private static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
     }
 

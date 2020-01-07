@@ -2,22 +2,15 @@ package com.example.sdaassign4_2019;
 
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 
 /**
@@ -28,9 +21,6 @@ import java.util.Objects;
  * @author Chris Coughlan
  */
 public class BookList extends Fragment {
-
-
-    FirebaseStorage images = FirebaseStorage.getInstance();
 
     public BookList() {
         // Required empty public constructor
