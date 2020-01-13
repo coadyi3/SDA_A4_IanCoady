@@ -18,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -33,39 +35,61 @@ import static com.example.sdaassign4_2019.Settings.PREF_KEY;
 
 public class CheckOut extends AppCompatActivity {
 
-    FirebaseFirestore mFirestore;
-
-    TextView mDisplaySummary, mTitleSummary,mStatusSummary;
-    Calendar mDateAndTime = Calendar.getInstance();
-    String currentDate, selectedDate,titleText, userName;
-    String bookStatus = "Available";
-    int userid,dateBtnClicked = 0;
+    FirebaseFirestore   mFirestore;
+    TextView            mDisplaySummary, mTitleSummary,mStatusSummary;
+    Calendar            mDateAndTime = Calendar.getInstance();
+    String              currentDate, selectedDate,titleText, userName;
+    String              bookStatus = "Available";
+    int                 userid,dateBtnClicked = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
+        final Button sendBtn = findViewById(R.id.orderButton);
         Bundle extras = getIntent().getExtras();
         titleText = extras.getString("title");
         SharedPreferences prefs = this.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
         userName = prefs.getString("NAME_KEY", "");
         userid = prefs.getInt("ID_KEY", 0);
-
-        mFirestore = FirebaseFirestore.getInstance();
-        final CollectionReference bookList = mFirestore.collection("books");
-
-
-        //find the summary textview
         mDisplaySummary = findViewById(R.id.orderSummary);
         mTitleSummary = findViewById(R.id.confirm);
         mStatusSummary = findViewById(R.id.availability);
 
-        mStatusSummary.setText("This book is currently "+bookStatus+".");
+        mFirestore = FirebaseFirestore.getInstance();
+        final CollectionReference bookList = mFirestore.collection("books");
+
+        DocumentReference df = mFirestore.collection("books").document(titleText);
+        df.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+
+                    if(doc.exists()){
+                        bookStatus = doc.getString("bookStatus");
+                        mStatusSummary.setText("This book is currently "+bookStatus+".");
+                        if(bookStatus.equals("Available")){
+                            sendBtn.setEnabled(true);
+                        }
+                        else{
+                            sendBtn.setEnabled(false);
+                        }
+                    }
+
+                    else{
+                        bookStatus = "Available";
+                        mStatusSummary.setText("This book is currently "+bookStatus+".");
+                    }
+                }
+            }
+        });
+
+
+
         mTitleSummary.setText("Checkout book: "+ titleText);
 
-
-        final Button sendBtn = findViewById(R.id.orderButton);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,12 +97,15 @@ public class CheckOut extends AppCompatActivity {
                    if(bookStatus.equals("Available")) {
                        bookStatus = "Unavailable";
 
+                       Date currentDayTime = java.util.Calendar.getInstance().getTime();
+                       currentDate = currentDayTime.toString();
 
                        Map<String, Object> bookDetails = new HashMap<>();
                        bookDetails.put("userName", userName);
                        bookDetails.put("selectedDate", selectedDate);
                        bookDetails.put("userID", String.valueOf(userid));
                        bookDetails.put("bookStatus", bookStatus);
+                       bookDetails.put("currentDate", currentDate);
                        bookList.document(titleText).set(bookDetails);
 
                        sendBtn.setEnabled(false);
@@ -89,6 +116,7 @@ public class CheckOut extends AppCompatActivity {
 
                    else{
                        Toast.makeText(getApplicationContext(), "This book is unavailable at the moment, come back later and try again.", Toast.LENGTH_LONG).show();
+                       sendBtn.setEnabled(false);
                    }
 
                 }
@@ -102,27 +130,24 @@ public class CheckOut extends AppCompatActivity {
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendBtn.setEnabled(true);
-                bookStatus = "Available";
-                mDisplaySummary.setText("This book is available for rental again");
-                mStatusSummary.setText("This book is currently "+bookStatus+".");
+                sendBtn             .setEnabled(true);
+                bookStatus          = "Available";
+                mDisplaySummary     .setText("This book is available for rental again");
+                mStatusSummary      .setText("This book is currently "+bookStatus+".");
 
                 Map<String, Object> bookDetails = new HashMap<>();
                 bookDetails.put("userName", userName);
                 bookDetails.put("selectedDate", null);
                 bookDetails.put("userID", String.valueOf(userid));
                 bookDetails.put("bookStatus", bookStatus);
+                bookDetails.put("currentDate", null);
                 bookList.document(titleText).set(bookDetails);
-
             }
         });
 
         //set the toolbar we have overridden
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
     }
 
     //source SDA_2019 android course examples ViewGroup demo
@@ -149,8 +174,6 @@ public class CheckOut extends AppCompatActivity {
 
     private void updateDateAndTimeDisplay() {
         //date time year
-        String currentTime = DateUtils.formatDateTime(this, mDateAndTime.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME);
         selectedDate = DateUtils.formatDateTime(this, mDateAndTime.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
-        String finalSummary = selectedDate + " current time is " + currentTime;
     }
 }
