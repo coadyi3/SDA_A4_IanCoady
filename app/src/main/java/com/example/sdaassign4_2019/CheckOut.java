@@ -17,20 +17,32 @@ import java.util.Locale;
 
 public class CheckOut extends AppCompatActivity {
 
-    TextView mDisplaySummary;
+    TextView mDisplaySummary, mTitleSummary;
     Calendar mDateAndTime = Calendar.getInstance();
+
+    String currentDate, selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
+        //find the summary textview
+        mDisplaySummary = findViewById(R.id.orderSummary);
+        mTitleSummary = findViewById(R.id.confirm);
+
+
+        Bundle extras = getIntent().getExtras();
+
+        String titleText = extras.getString("title");
+        mTitleSummary.setText("Checkout book: "+ titleText);
+
         //set the toolbar we have overridden
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //find the summary textview
-        mDisplaySummary = findViewById(R.id.orderSummary);
+
+
     }
 
     //source SDA_2019 android course examples ViewGroup demo
@@ -55,9 +67,9 @@ public class CheckOut extends AppCompatActivity {
 
     private void updateDateAndTimeDisplay() {
         //date time year
-        CharSequence currentTime = DateUtils.formatDateTime(this, mDateAndTime.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME);
-        CharSequence SelectedDate = DateUtils.formatDateTime(this, mDateAndTime.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
-        String finalSummary = SelectedDate + " current time is " + currentTime;
+        String currentTime = DateUtils.formatDateTime(this, mDateAndTime.getTimeInMillis(), DateUtils.FORMAT_SHOW_TIME);
+        selectedDate = DateUtils.formatDateTime(this, mDateAndTime.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_NUMERIC_DATE | DateUtils.FORMAT_SHOW_YEAR);
+        String finalSummary = selectedDate + " current time is " + currentTime;
         mDisplaySummary.setText(finalSummary);
     }
 }
