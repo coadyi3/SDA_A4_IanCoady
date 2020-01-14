@@ -1,7 +1,6 @@
 <resources>
-    <string name="app_name">SDA Assign4_2019</string>
+    <string name="app_name">SDA Assign4_2019 Ian Coady</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_ragment">One string</string>
     <string name="images_desc">Book Thumb</string>
@@ -10,4 +9,30 @@
     <string name="border">border item</string>
     <string name="check_out">Check Out</string>
     <string name="library">library</string>
+    <string name="avail">Available</string>
+    <string name="unavail">Unavailable</string>
+    <string name="unavail_message">This book is unavailable at the moment, come back later and try again.</string>
+    <string name="select_date_msg">Please select a date first.</string>
+    <string name="summary_avail">This book is available for rental again</string>
+    <string name="current_status_msg">This book is currently</string>
+    <string name="success_reservation_msg">Success!! You have reserved the book:</string>
+    <string name="title_summary_text">Checkout book:</string>
+    <string name="welcome_msg">Welcome to DCU\'s Book reservation app.</string>
+    <string name="opening_hours">Book drop-off opens from 9am to 14:00 every day</string>
+    <string name="borrow_hint">Borrower Name</string>
+    <string name="borrow_id_hint">Borrower ID</string>
+    <string name="borrow_email_hint">Email address</string>
+    <string name="save_btn_text">Save Details</string>
+    <string name="saved_settings_title">Previously Saved Settings:</string>
+    <string name="delete_btn_text">DELETE DETAILS</string>
+    <string name="date_picker_btn_text">Select Date</string>
+    <string name="send_btn_text">Send Order</string>
+    <string name="book_title_text">Check out BookName</string>
+    <string name="availability_text">Book is available or Book will be available on this date: DATE</string>
+    <string name="reset_btn_text">Mark book as available.</string>
+    <string name="home_tab_text">HOME</string>
+    <string name="books_tab_text">BOOKS</string>
+    <string name="settings_tab_text">SETTINGS</string>
+    <string name="details_prompt">Please enter details in settings before attempting to checkout a book!</string>
+    <string name="validation_alert_text">Please enter a valid name, email address and/or borrower ID!</string>
 </resources>

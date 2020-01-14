@@ -57,7 +57,7 @@ public class BookList extends Fragment {
         mImageID.add("https://firebasestorage.googleapis.com/v0/b/assign4-iancoady.appspot.com/o/drawable%2Fsku100013.jpg?alt=media&token=91b9c312-eaf3-447a-bdbe-a0f32ae60c8d");
         mImageID.add("https://firebasestorage.googleapis.com/v0/b/assign4-iancoady.appspot.com/o/drawable%2Fsku100014.jpg?alt=media&token=5b1a974e-b2d3-43ce-955a-e7c278486eac");
 
-        //adding author and title.
+        //adding author and title. Not internationalizing these strings as the book names wont change based on region.
         mAuthor.add("Edgar Rice Burroughs"); mTitle.add("Tarzan and the Golden Lion");
         mAuthor.add("Agatha Christie"); mTitle.add("The Murder on the Links");
         mAuthor.add("Winston S. Churchill"); mTitle.add("The World Crisis");

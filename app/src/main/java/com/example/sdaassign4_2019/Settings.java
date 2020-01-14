@@ -25,13 +25,13 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class Settings extends Fragment {
 
-    static final String PREF_KEY = "preferences";
-    private static final String NAME_KEY = "NAME_KEY";
-    private static final String EMAIL_KEY = "EMAIL_KEY";
-    private static final String ID_KEY = "ID_KEY";
-    private TextView name, email, id;
-    private EditText validName, validEmail, validId;
-    public SharedPreferences prefs;
+    static final            String              PREF_KEY = "preferences";
+    private static final    String              NAME_KEY = "NAME_KEY";
+    private static final    String              EMAIL_KEY = "EMAIL_KEY";
+    private static final    String              ID_KEY = "ID_KEY";
+    private                 TextView            name, email, id;
+    private                 EditText            validName, validEmail, validId;
+    public                  SharedPreferences   prefs;
 
 
     public Settings() {
@@ -51,16 +51,16 @@ public class Settings extends Fragment {
         email   = root.findViewById(R.id.savedEmail);
         id      = root.findViewById(R.id.savedId);
 
-        name.setText(prefs.getString(NAME_KEY, ""));
-        email.setText(prefs.getString(EMAIL_KEY, ""));
-        id.setText(String.valueOf(prefs.getInt(ID_KEY, 0)));
+        name        .setText(prefs.getString(NAME_KEY, ""));
+        email       .setText(prefs.getString(EMAIL_KEY, ""));
+        id          .setText(String.valueOf(prefs.getInt(ID_KEY, 0)));
 
         if(Integer.parseInt(id.getText().toString()) == 0) id.setVisibility(View.INVISIBLE);
 
 
-        validName = root.findViewById(R.id.userName);
-        validEmail = root.findViewById(R.id.email);
-        validId = root.findViewById(R.id.borrowerID);
+        validName   = root.findViewById(R.id.userName);
+        validEmail  = root.findViewById(R.id.email);
+        validId     = root.findViewById(R.id.borrowerID);
 
         final Button saveBtn = root.findViewById(R.id.saveButton);
 
@@ -91,7 +91,7 @@ public class Settings extends Fragment {
                 }
 
                 else{
-                    Toast.makeText(getContext(), "Please enter a valid name, email address and/or borrower ID!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.validation_alert_text, Toast.LENGTH_SHORT).show();
 
                     validName.setText("");
                     validEmail.setText("");

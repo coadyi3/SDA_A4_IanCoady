@@ -65,15 +65,15 @@ public class ViewPageAdapter extends FragmentPagerAdapter {
         {
             case 1:
                 //code
-                tabTitle = "HOME";
+                tabTitle = context.getString(R.string.home_tab_text);
                 break;
             case 2:
                 //code
-                tabTitle = "BOOKS";
+                tabTitle = context.getString(R.string.books_tab_text);
                 break;
             case 3:
                 //code
-                tabTitle = "SETTINGS";
+                tabTitle = context.getString(R.string.settings_tab_text);
                 break;
         }
 

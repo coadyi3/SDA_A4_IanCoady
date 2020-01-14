@@ -88,7 +88,7 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
 
                 if(name.equals("") || email.equals("") || id <= 0)
                 {
-                    Toast.makeText(mNewContext,"Please enter details in settings before attempting to checkout a book!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mNewContext, R.string.details_prompt,Toast.LENGTH_SHORT).show();
                 }
 
                 else

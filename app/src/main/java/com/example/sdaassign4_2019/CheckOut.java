@@ -21,25 +21,21 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.example.sdaassign4_2019.Settings.PREF_KEY;
 
 public class CheckOut extends AppCompatActivity {
 
-    FirebaseFirestore   mFirestore;
+    FirebaseFirestore   myFirestoreDB;
     TextView            mDisplaySummary, mTitleSummary,mStatusSummary;
     Calendar            mDateAndTime = Calendar.getInstance();
     String              currentDate, selectedDate,titleText, userName;
-    String              bookStatus = "Available";
+    String              bookStatus = "Available";       //Hardcoded string - When I tried using bookStatus = getString(R.string.avail); the app would crash? Could you explain in my feedback please.
     int                 userid,dateBtnClicked = 0;
 
     @Override
@@ -47,40 +43,50 @@ public class CheckOut extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out);
 
-        final Button sendBtn = findViewById(R.id.orderButton);
-        Bundle extras = getIntent().getExtras();
-        titleText = extras.getString("title");
-        SharedPreferences prefs = this.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
-        userName = prefs.getString("NAME_KEY", "");
-        userid = prefs.getInt("ID_KEY", 0);
-        mDisplaySummary = findViewById(R.id.orderSummary);
-        mTitleSummary = findViewById(R.id.confirm);
-        mStatusSummary = findViewById(R.id.availability);
+        final   Button              sendBtn             = findViewById(R.id.orderButton);
+                                    myFirestoreDB       = FirebaseFirestore.getInstance();
+        final   CollectionReference bookList            = myFirestoreDB.collection("books");
+                Bundle              extras              = getIntent().getExtras();
+                SharedPreferences   prefs               = this.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
+                Button              reset               = findViewById(R.id.resetButton);
+                                    userName            = prefs.getString   ("NAME_KEY", "");
+                                    userid              = prefs.getInt      ("ID_KEY", 0);
+                                    mDisplaySummary     = findViewById(R.id.orderSummary);
+                                    mTitleSummary       = findViewById(R.id.confirm);
+                                    mStatusSummary      = findViewById(R.id.availability);
 
-        mFirestore = FirebaseFirestore.getInstance();
-        final CollectionReference bookList = mFirestore.collection("books");
+        if (extras != null) {
+            titleText = extras.getString("title");
+        }
 
-        DocumentReference df = mFirestore.collection("books").document(titleText);
-        df.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+
+
+        DocumentReference myDocRef = myFirestoreDB.collection("books").document(titleText);
+        myDocRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if(task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
 
-                    if(doc.exists()){
-                        bookStatus = doc.getString("bookStatus");
-                        mStatusSummary.setText("This book is currently "+bookStatus+".");
-                        if(bookStatus.equals("Available")){
-                            sendBtn.setEnabled(true);
-                        }
-                        else{
-                            sendBtn.setEnabled(false);
-                        }
-                    }
+                    if (doc != null) {
+                        if(doc.exists()){
 
-                    else{
-                        bookStatus = "Available";
-                        mStatusSummary.setText("This book is currently "+bookStatus+".");
+                            bookStatus = doc.getString("bookStatus");
+                            mStatusSummary.setText(String.format("%s %s.", getString(R.string.current_status_msg), bookStatus));
+
+                            if(bookStatus.equals(getString(R.string.avail))){
+                                sendBtn.setEnabled(true);
+                            }
+                            else{
+                                sendBtn.setEnabled(false);
+                            }
+                        }
+
+                        else{
+                            bookStatus = getString(R.string.avail);
+                            mStatusSummary.setText(String.format("%s %s.", getString(R.string.current_status_msg), bookStatus));
+                        }
                     }
                 }
             }
@@ -88,14 +94,14 @@ public class CheckOut extends AppCompatActivity {
 
 
 
-        mTitleSummary.setText("Checkout book: "+ titleText);
+        mTitleSummary.setText(String.format("%s %s", getString(R.string.title_summary_text), titleText));
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(dateBtnClicked > 0) {
-                   if(bookStatus.equals("Available")) {
-                       bookStatus = "Unavailable";
+                   if(bookStatus.equals(getString(R.string.avail))) {
+                       bookStatus = getString(R.string.unavail);
 
                        Date currentDayTime = java.util.Calendar.getInstance().getTime();
                        currentDate = currentDayTime.toString();
@@ -110,30 +116,30 @@ public class CheckOut extends AppCompatActivity {
 
                        sendBtn.setEnabled(false);
 
-                       mDisplaySummary.setText("Success!! You have reserved the book: " + titleText + ".");
-                       mStatusSummary.setText("This book is currently "+bookStatus+".");
+                       mDisplaySummary.setText(String.format("%s %s.", getString(R.string.success_reservation_msg), titleText));
+                       mStatusSummary.setText(String.format("%s %s.", getString(R.string.current_status_msg), bookStatus));
                    }
 
                    else{
-                       Toast.makeText(getApplicationContext(), "This book is unavailable at the moment, come back later and try again.", Toast.LENGTH_LONG).show();
+                       Toast.makeText(getApplicationContext(), R.string.unavail_message, Toast.LENGTH_LONG).show();
                        sendBtn.setEnabled(false);
                    }
 
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Please select a date first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.select_date_msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        Button reset = findViewById(R.id.resetButton);
+
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendBtn             .setEnabled(true);
-                bookStatus          = "Available";
-                mDisplaySummary     .setText("This book is available for rental again");
-                mStatusSummary      .setText("This book is currently "+bookStatus+".");
+                bookStatus          = getString(R.string.avail);
+                mDisplaySummary     .setText(R.string.summary_avail);
+                mStatusSummary      .setText(String.format("%s %s.", getString(R.string.current_status_msg), bookStatus));
 
                 Map<String, Object> bookDetails = new HashMap<>();
                 bookDetails.put("userName", userName);
