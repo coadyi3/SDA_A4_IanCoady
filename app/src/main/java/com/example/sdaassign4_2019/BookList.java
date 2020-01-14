@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 
-/**
+/*
  * Images used are sourced from Public Domain Day 2019.
  * by Duke Law School's Center for the Study of the Public Domain
  * is licensed under a Creative Commons Attribution-ShareAlike 3.0 Unported License.
  * A simple {@link Fragment} subclass.
  * @author Chris Coughlan
  */
+
 public class BookList extends Fragment {
 
     public BookList() {
@@ -41,7 +42,7 @@ public class BookList extends Fragment {
         ArrayList<String> mTitle = new ArrayList<>();
         ArrayList<String> mImageID = new ArrayList<>();
 
-
+        //Adding images stored in firebase cloud storage.
         mImageID.add("https://firebasestorage.googleapis.com/v0/b/assign4-iancoady.appspot.com/o/drawable%2Fsku10001.jpg?alt=media&token=ae34bc8c-f67b-4bfa-af4b-2c1f8df84f9f");
         mImageID.add("https://firebasestorage.googleapis.com/v0/b/assign4-iancoady.appspot.com/o/drawable%2Fsku10002.jpg?alt=media&token=4a229018-c49d-4e48-9874-2d7a80d4f851");
         mImageID.add("https://firebasestorage.googleapis.com/v0/b/assign4-iancoady.appspot.com/o/drawable%2Fsku10003.jpg?alt=media&token=549e4f0f-d12d-46b5-ac9d-54ddb5b415a4");

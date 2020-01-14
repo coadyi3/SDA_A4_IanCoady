@@ -20,6 +20,9 @@ public class ViewPageAdapter extends FragmentPagerAdapter {
         context = nContext;
     }
 
+    /*
+    Runs the appropriate activity based on what tab is active.
+     */
     @NonNull
     @Override
     public Fragment getItem(int position) {
@@ -54,6 +57,9 @@ public class ViewPageAdapter extends FragmentPagerAdapter {
         return 3;
     }
 
+    /*
+    Sets the text on the tabs.
+     */
     @Override
     public CharSequence getPageTitle(int position) {
         position = position+1;

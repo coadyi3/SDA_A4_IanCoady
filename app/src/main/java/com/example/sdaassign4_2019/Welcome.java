@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 
-/**
+/*
  * A simple {@link Fragment} subclass.
  */
 public class Welcome extends Fragment {
@@ -24,12 +24,14 @@ public class Welcome extends Fragment {
         // Required empty public constructor
     }
 
+    /*
+    Standard welcome page inflated here in onCreateView
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_welcome, container, false);
-        return root;
+        return inflater.inflate(R.layout.fragment_welcome, container, false);
     }
 
 }

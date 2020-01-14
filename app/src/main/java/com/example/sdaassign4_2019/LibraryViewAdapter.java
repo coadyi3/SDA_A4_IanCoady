@@ -36,13 +36,13 @@ import static com.example.sdaassign4_2019.Settings.PREF_KEY;
 
 
 /*
- * @author Chris Coughlan 2019
+ * @author Chris Coughlan & Ian Coady 2019
  */
 public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.ViewHolder> {
     private static final String TAG = "RecyclerViewAdapter";
     private Context mNewContext;
 
-    //add array for each item\
+    //add array for each item
     private ArrayList<String> mAuthor;
     private ArrayList<String> mTitle;
     private ArrayList<String> mImageID;
@@ -55,7 +55,9 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
 
     }
 
-    //declare methods
+    /*
+    ViewHolder to inflate the layout xml file
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -70,12 +72,19 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
         viewHolder.authorText.setText(mAuthor.get(position));
         viewHolder.titleText.setText(mTitle.get(position));
 
+        /*
+        Glide library to load the image into the recycler view from the Firebase storage.
+         */
         Glide.with(mNewContext)
                 .asBitmap()
                 .load(mImageID.get(position))
                 .into(viewHolder.imageItem);
 
-        //should check here to see if the book is available.
+        /*
+        Check Out button listener, first checks if the user has input and saved their valid
+        details into shared preferences, is true, open the check out activity and send the book name
+        it, if not inform them to do so.
+         */
         viewHolder.checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -93,8 +102,6 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
 
                 else
                 {
-                    Toast.makeText(mNewContext, mTitle.get(position), Toast.LENGTH_SHORT).show();
-
                     Intent myOrder = new Intent (mNewContext, CheckOut.class);
                     myOrder.putExtra("title", mTitle.get(position));
                     mNewContext.startActivity(myOrder);
@@ -103,6 +110,9 @@ public class LibraryViewAdapter extends RecyclerView.Adapter<LibraryViewAdapter.
         });
     }
 
+    /*
+    Required getItemCount method
+     */
     @Override
     public int getItemCount() {
         return mAuthor.size();
